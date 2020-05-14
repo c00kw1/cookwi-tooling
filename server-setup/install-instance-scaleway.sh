@@ -38,6 +38,11 @@ cp ./nginx/* /etc/nginx/site-available/
 rm /etc/nginx/site-enables/default # we just remove the link, not the actual default for nginx which could at some point be useful again
 ln -s /etc/nginx/sites-available/cookwi-default /etc/nginx/sites-enabled/cookwi-default
 
+# generate and show key for adding to cookwi-bot account
+ssh-keygen -t rsa -b 4096 -N '' -f /root/.ssh/id_rsa -q
+cat /root/.ssh/id_rsa.pub
+echo "Please add this key to cookwi-bot github account"
+read -n 1 -p "Press any key to resume the script once it's done ..." # will prompt
 # we trust github (avoid ssh key prompts)
 ssh-keyscan -H github.com >> /root/.ssh/known_hosts
 
@@ -75,11 +80,7 @@ then
     apt update
     apt install -y apt-transport-https dotnet-sdk-3.1 # will prompt ...
     # Github stuff
-    ssh-keygen -t rsa -b 4096 -N '' -f /root/.ssh/deploy_api -q
-    cat /root/.ssh/deploy_api.pub
-    echo "Please put that key into GitHub's repository Deploy Key section before resuming !"
-    read -n 1 -p "Press any key to resume the script ..." # will prompt
-    ssh-agent bash -c 'ssh-add /root/.ssh/deploy_api; git clone --branch homologation git@github.com:gjdass/cookwi-api.git /root/cookwi-api-code'
+    git clone --branch homologation git@github.com:gjdass/cookwi-api.git /root/cookwi-api-code
     dotnet publish /root/cookwi-api-code/Api.Hosting/Api.Hosting.csproj -c Release -o /var/www/cookwi-api
     ln -s /etc/nginx/sites-available/cookwi-api /etc/nginx/sites-enabled/cookwi-api
     certbot --nginx --non-interactive --agree-tos --domains api.$host -m $mail
@@ -96,11 +97,7 @@ then
     apt install -y nodejs
     npm install -g @angular/cli # will prompt
     # Github stuff
-    ssh-keygen -t rsa -b 4096 -N '' -f /root/.ssh/deploy_webclient -q
-    cat /root/.ssh/deploy_webclient.pub
-    echo "Please put that key into GitHub's repository Deploy Key section before resuming !"
-    read -n 1 -p "Press any key to resume the script ..." # will prompt
-    ssh-agent bash -c 'ssh-add /root/.ssh/deploy_webclient; git clone --branch homologation git@github.com:gjdass/cookwi-webclient.git /root/cookwi-webclient-code'
+    git clone --branch homologation git@github.com:gjdass/cookwi-webclient.git /root/cookwi-webclient-code
     cd /root/cookwi-webclient-code
     npm install
     ng build --output-path=/var/www/cookwi-webclient --configuration=homologation

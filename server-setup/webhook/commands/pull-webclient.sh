@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd /root/cookwi-webclient-code
-ssh-agent bash -c 'ssh-add /root/.ssh/deploy_webclient; git fetch'
+git fetch
 # do we need to pull and build and deploy ?
 # https://stackoverflow.com/questions/3258243/check-if-pull-needed-in-git
 UPSTREAM=${1:-'@{u}'}
@@ -11,7 +11,7 @@ BASE=$(git merge-base @ "$UPSTREAM")
 if [ $LOCAL = $REMOTE ]; then # up-to-date
     echo "Up-to-date"
 elif [ $LOCAL = $BASE ]; then # we need to pull
-    ssh-agent bash -c 'ssh-add /root/.ssh/deploy_webclient; git pull'
+    git pull
     npm install
     ng build --output-path=/var/www/cookwi-webclient-tmp --configuration=homologation
     rm -rf /var/www/cookwi-webclient
