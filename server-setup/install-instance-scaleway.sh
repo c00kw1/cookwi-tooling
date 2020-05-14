@@ -1,8 +1,15 @@
 #!/bin/bash
-# This script will install, deploy and start a basic homologation server
-# for cookwi.
-# TO BE EXECUTED IN /root/<directory> WITH UNCHANGED DIRECTORY STRUCTURE
-# example : ./install-instance-scaleway hom-1.cookwi.com [1|0]
+
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!! IMPORTANT NOTICE !!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# 
+# This script assume that :
+# - you pulled cookwi-tooling github repo in /root, so should be /root/cookwi-tooling
+# - this script has not been moved, so it is located in /root/cookwi-tooling/server-setup/
+# - this script is EXECUTED from this very same directory : cd /root/cookwi-tooling/server-setup/
+#
+#
 
 if [ $1 = 'help' ] || [ $1 = '--help' ]
 then
@@ -48,7 +55,10 @@ ssh-keyscan -H github.com >> /root/.ssh/known_hosts
 
 # setup Webhook
 apt install -y webhook # will prompt
+chmod +x ./webhook/commands/*.sh
 cp -r ./webhook /var/www/
+mkdir /var/scripts
+cp ./webhook/commands/pull-tooling.sh /var/scripts/
 cp ./services/webhook.service /etc/systemd/system/
 systemctl enable webhook.service
 systemctl start webhook.service

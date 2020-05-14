@@ -14,10 +14,10 @@ elif [ $LOCAL = $BASE ]; then # we need to pull
     git pull
     # replace the scripts for hooks
     cp -r ./server-setup/webhook /var/www/webhook-tmp
-    service webhook stop
+    chmod +x /var/www/webhook-tmp/commands/*.sh
     rm -rf /var/www/webhook
     mv /var/www/webhook-tmp /var/www/webhook
-    service webhook start
+    service webhook restart
 fi
 
 exit 0
