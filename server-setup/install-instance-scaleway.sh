@@ -50,7 +50,6 @@ ssh-keyscan -H github.com >> /root/.ssh/known_hosts
 apt install -y webhook # will prompt
 cp -r ./webhook /var/www/
 cp ./services/webhook.service /etc/systemd/system/
-# TODO : setup /var/www/webhook/hook.json here
 systemctl enable webhook.service
 systemctl start webhook.service
 ln -s /etc/nginx/sites-available/cookwi-webhook /etc/nginx/sites-enabled/cookwi-webhook
