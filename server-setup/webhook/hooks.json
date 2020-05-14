@@ -59,8 +59,8 @@
     },
     {
         "id": "pull_tooling",
-        "execute-command": "/var/www/webhook/commands/pull-tooling.sh",
-        "command-working-directory": "/var/www/webhook",
+        "execute-command": "/var/scripts/pull-tooling.sh",
+        "command-working-directory": "/var/scripts",
         "trigger-rule": {
             "and": [
                 {
