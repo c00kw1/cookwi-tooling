@@ -1,7 +1,7 @@
 [
     {
         "id": "pull_webclient",
-        "execute-command": "/var/www/webhooks/commands/pull-webclient.sh",
+        "execute-command": "/var/www/webhook/commands/pull-webclient.sh",
         "command-working-directory": "/var/www/webhook",
         "trigger-rule": {
             "and": [
@@ -30,7 +30,7 @@
     },
     {
         "id": "pull_api",
-        "execute-command": "/var/www/webhooks/commands/pull-api.sh",
+        "execute-command": "/var/www/webhook/commands/pull-api.sh",
         "command-working-directory": "/var/www/webhook",
         "trigger-rule": {
             "and": [
@@ -59,7 +59,7 @@
     },
     {
         "id": "pull_tooling",
-        "execute-command": "/var/www/webhooks/commands/pull-tooling.sh",
+        "execute-command": "/var/www/webhook/commands/pull-tooling.sh",
         "command-working-directory": "/var/www/webhook",
         "trigger-rule": {
             "and": [
