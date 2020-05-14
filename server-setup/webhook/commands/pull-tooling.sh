@@ -20,7 +20,7 @@ elif [ $LOCAL = $BASE ]; then # we need to pull
     git pull
 
     # deploy API SQL credentials
-    cp ./server-setup/credentials/cookwi-sql-credentials.json /var/www/cookwi-api/credentials
+    cp -r ./server-setup/credentials /var/www/cookwi-api/
     service cookwi-api restart
 
     # deploy Webhooks
