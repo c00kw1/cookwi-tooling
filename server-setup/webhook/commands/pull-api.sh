@@ -14,8 +14,9 @@ elif [ $LOCAL = $BASE ]; then # we need to pull
     git pull
     dotnet publish /root/cookwi-api-code/Api.Hosting/Api.Hosting.csproj -c Release -o /var/www/cookwi-api-tmp
     service cookwi-api stop
-    rm -rf /var/www/cookwi-api
+    mv /var/www/cookwi-api /var/www/cookwi-api-old
     mv /var/www/cookwi-api-tmp /var/www/cookwi-api
+    mv /var/www/cookwi-api-old/credentials /var/www/cookwi-api
     service cookwi-api start
 fi
 

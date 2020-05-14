@@ -12,12 +12,17 @@ if [ $LOCAL = $REMOTE ]; then # up-to-date
     echo "Up-to-date"
 elif [ $LOCAL = $BASE ]; then # we need to pull
     git pull
-    # replace the scripts for hooks
+
+    # deploy Webhooks
     cp -r ./server-setup/webhook /var/www/webhook-tmp
     chmod +x /var/www/webhook-tmp/commands/*.sh
     rm -rf /var/www/webhook
     mv /var/www/webhook-tmp /var/www/webhook
     service webhook restart
+
+    # deploy API SQL credentials
+    cp ./server-setup/credentials/cookwi-sql-credentials.json /var/www/cookwi-api/credentials
+    service cookwi-api restart
 fi
 
 exit 0

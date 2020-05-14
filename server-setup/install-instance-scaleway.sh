@@ -91,6 +91,7 @@ then
     # Github stuff
     git clone --branch homologation git@github.com:gjdass/cookwi-api.git /root/cookwi-api-code
     dotnet publish /root/cookwi-api-code/Api.Hosting/Api.Hosting.csproj -c Release -o /var/www/cookwi-api
+    cp -r ./credentials /var/www/cookwi-api
     ln -s /etc/nginx/sites-available/cookwi-api /etc/nginx/sites-enabled/cookwi-api
     certbot --nginx --non-interactive --agree-tos --domains api.$host -m $mail
     # let's make it a service
