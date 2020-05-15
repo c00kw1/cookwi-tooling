@@ -17,6 +17,7 @@ elif [ $LOCAL = $BASE ]; then # we need to pull
     mv /var/www/cookwi-api /var/www/cookwi-api-old
     mv /var/www/cookwi-api-tmp /var/www/cookwi-api
     mv /var/www/cookwi-api-old/credentials /var/www/cookwi-api
+    rm -rf /var/www/cookwi-api-old
     service cookwi-api start
 fi
 

@@ -12,10 +12,11 @@ if [ $LOCAL = $REMOTE ]; then # up-to-date
     echo "Up-to-date"
 elif [ $LOCAL = $BASE ]; then # we need to pull
     git pull
-    npm install
-    ng build --output-path=/var/www/cookwi-webclient-tmp --configuration=homologation
-    rm -rf /var/www/cookwi-webclient
-    mv /var/www/cookwi-webclient-tmp /var/www/cookwi-webclient
+    # THIS MAKES THE SERVER GOES DOWN ... TOO HEAVY
+    # npm install
+    # ng build --output-path=/var/www/cookwi-webclient-tmp --configuration=homologation
+    # rm -rf /var/www/cookwi-webclient
+    # mv /var/www/cookwi-webclient-tmp /var/www/cookwi-webclient
 fi
 
 exit 0
