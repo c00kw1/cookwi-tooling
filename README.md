@@ -1,6 +1,6 @@
 # Cookwi tooling
 
-Some tooling for CI, server setup etc.
+Some tooling for CI, server setup etc...
 
 ## Tools used
 
