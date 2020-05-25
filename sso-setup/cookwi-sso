@@ -1,0 +1,29 @@
+server {
+    listen 80;
+    server_name sso.hom.cookwi.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name sso.hom.cookwi.com;
+
+    ssl_certificate /etc/letsencrypt/live/sso.hom.cookwi.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/sso.hom.cookwi.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+    access_log            /var/log/nginx/sso.hom.cookwi.com.access.log;
+
+    location / {
+        proxy_pass http://localhost:8081;
+        proxy_redirect off;
+        proxy_set_header    Host               $host;
+        proxy_set_header    X-Real-IP          $remote_addr;
+        proxy_set_header    X-Forwarded-For    $proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Host   $host;
+        proxy_set_header    X-Forwarded-Server $host;
+        proxy_set_header    X-Forwarded-Port   $server_port;
+        proxy_set_header    X-Forwarded-Proto  $scheme;
+    }
+}
