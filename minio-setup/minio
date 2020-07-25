@@ -1,0 +1,38 @@
+server {
+    listen 80;
+    server_name s3.cookwi.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name s3.cookwi.com;
+    ssl_certificate /etc/letsencrypt/live/s3.cookwi.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/s3.cookwi.com/privkey.pem; # managed by Certbot
+
+    ssl_session_cache  builtin:1000  shared:SSL:10m;
+    ssl_protocols  TLSv1 TLSv1.1 TLSv1.2;
+    ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
+    ssl_prefer_server_ciphers on;
+
+    access_log            /var/log/nginx/api.hom.cookwi.com.access.log;
+
+    proxy_buffering off;
+    client_max_body_size 1000m;
+    ignore_invalid_headers off;
+
+    location / {
+        proxy_pass http://localhost:6000;
+        proxy_redirect off;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Port "443";
+        proxy_set_header X-Forwarded-Proto "https";
+
+        proxy_connect_timeout 300;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        chunked_transfer_encoding off;
+    }
+}
