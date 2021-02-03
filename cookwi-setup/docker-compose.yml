@@ -1,0 +1,71 @@
+version: "3"
+
+volumes:
+  s3_data:
+  sso_db_data:
+  sso_themes:
+  mongo_data:
+
+networks:
+  cookwi:
+    name: ${ENV_NAME}
+
+services:
+  s3:
+    image: minio/minio
+    container_name: s3
+    networks:
+      - cookwi
+    volumes:
+      - s3_data:/data
+    ports:
+      - "9000:9000"
+    environment:
+      - MINIO_ACCESS_KEY=${S3_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${S3_SECRET_KEY}
+    command: server /data
+  sso_db:
+    image: postgres:12-alpine
+    container_name: sso_db
+    networks:
+      - cookwi
+    volumes:
+      - sso_db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${SSO_DB_USER}
+      - POSTGRES_PASSWORD=${SSO_DB_PASSWORD}
+      - POSTGRES_DB=keycloak
+  sso:
+    image: jboss/keycloak
+    depends_on:
+      - sso_db
+    container_name: sso
+    networks:
+      - cookwi
+    volumes:
+      - sso_themes:/opt/jboss/keycloak/themes
+      - ./dev/sso-realm.json:/tmp/realm.json
+    ports:
+      - "8081:8080"
+    environment:
+      - DB_VENDOR=postgres
+      - DB_DATABASE=keycloak
+      - DB_USER=${SSO_DB_USER}
+      - DB_PASSWORD=${SSO_DB_PASSWORD}
+      - DB_ADDR=sso_db
+      - DB_PORT=5432
+      - KEYCLOAK_USER=${SSO_ADMIN_USER}
+      - KEYCLOAK_PASSWORD=${SSO_ADMIN_PASSWORD}
+      - KEYCLOAK_IMPORT=/tmp/realm.json
+  mongo:
+    image: mongo
+    container_name: mongodb
+    networks:
+      - cookwi
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ADMIN_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ADMIN_PASSWORD}
