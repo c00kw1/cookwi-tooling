@@ -23,7 +23,9 @@ services:
     environment:
       - MINIO_ACCESS_KEY=${S3_ACCESS_KEY}
       - MINIO_SECRET_KEY=${S3_SECRET_KEY}
-    command: server /data
+    entrypoint: sh
+    command: -c 'mkdir -p /data/development && /usr/bin/minio server /data'
+    restart: unless-stopped
   sso_db:
     image: postgres:12-alpine
     container_name: sso_db
@@ -35,6 +37,7 @@ services:
       - POSTGRES_USER=${SSO_DB_USER}
       - POSTGRES_PASSWORD=${SSO_DB_PASSWORD}
       - POSTGRES_DB=keycloak
+    restart: unless-stopped
   sso:
     image: jboss/keycloak
     depends_on:
@@ -57,6 +60,7 @@ services:
       - KEYCLOAK_USER=${SSO_ADMIN_USER}
       - KEYCLOAK_PASSWORD=${SSO_ADMIN_PASSWORD}
       - KEYCLOAK_IMPORT=/tmp/realm.json
+    restart: unless-stopped
   mongo:
     image: mongo
     container_name: mongodb
@@ -69,3 +73,4 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ADMIN_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ADMIN_PASSWORD}
+    restart: unless-stopped
