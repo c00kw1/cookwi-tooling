@@ -1,6 +1,6 @@
 #!/bin/sh
 
-$name = "cookwi-minio";
+$name = "s3";
 $port = "9000";
 $network = "bridge"
 
@@ -11,10 +11,10 @@ $admin_secret = "";
 docker volume create $name
 
 # run instance
-docker run -d -p 0.0.0.0:$port:9000 \
-  --name $name \
-  -v $name:/data \
-  -e "MINIO_ACCESS_KEY=$admin_key" \
-  -e "MINIO_SECRET_KEY=$admin_secret" \
-  --network=$network \
-  minio/minio server /data
+docker run -d -p 127.0.0.1:6000:9000 \
+  --name s3 \
+  -v minio-data:/data \
+  -e "MINIO_ACCESS_KEY=" \
+  -e "MINIO_SECRET_KEY=" \
+  --network=bridge \
+  minio/minio:latest server /data
