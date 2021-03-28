@@ -456,7 +456,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "secret": "d92560ca-9d7d-4d31-b8cf-c7774963248c",
+      "secret": "ccdc3cbd-9547-4df8-83e9-706f7910d3e6",
       "redirectUris": ["https://api.hom.cookwi.com/*"],
       "webOrigins": ["https://api.hom.cookwi.com"],
       "notBefore": 0,
